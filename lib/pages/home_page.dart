@@ -1,32 +1,7 @@
 import 'package:flutter/material.dart';
 import 'new_task.dart';
+import 'package:to_do_list/models/task.dart';
 
-class Task {
-  late int id;
-  late String desc;
-  late bool importance;
-  late bool completance;
-  late String deadline;
-
-  Task(this.id, this.desc, this.importance, this.completance, this.deadline);
-}
-
-List<Task> tasks = [
-  Task(0, "Надо делать", true, false, "18:02:2023"),
-  Task(1, "Дедлайн близко", false, false, "18:02:2023"),
-  Task(2, "Надо делать", true, false, "18:02:2023"),
-  Task(3, "Надо делать", true, false, "18:02:2023"),
-  Task(4, "Надо делать", true, false, "18:02:2023"),
-  Task(5, "Надо делать", true, false, "18:02:2023"),
-  Task(6, "Надо делать", true, false, "18:02:2023"),
-  Task(7, "Надо делать", true, false, "18:02:2023"),
-  Task(8, "Надо делать", true, false, "18:02:2023"),
-  Task(9, "Надо делать", true, false, "18:02:2023"),
-  Task(10, "Надо делать", true, false, "18:02:2023"),
-  Task(11, "Надо делать", true, false, "18:02:2023"),
-  Task(12, "Надо делать", true, false, "18:02:2023"),
-  Task(13, "Надо делать", true, false, "18:02:2023")
-];
 // StatefulWidget имеет состояние, с которым
 // позже мы будем работать через функцию
 // setState(VoidCallback fn);
@@ -47,7 +22,26 @@ class HomePage extends StatefulWidget {
 // нижнее подчеркивание аналогия private в Java / Kotlin
 class _HomePageState extends State<HomePage> {
 
-   Map<String, Task> allTasks = {};
+   List<Task> allTasks = [
+     Task(id: 0, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 1, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 2, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 3, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 4, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 5, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 6, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 7, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 8, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 9, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 10, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 11, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 12, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 13, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 14, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 15, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 16, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+     Task(id: 17, desc: "Надо делать", importance: true, completance: false, deadline: "18:02:2023"),
+   ];
 
   // функция build, как мы уже отметили, строит
   // иерархию наших любимых виджетов
@@ -59,22 +53,107 @@ class _HomePageState extends State<HomePage> {
     // Drawer, FloatingActionButton и другие не менее важные
     // компоненты (виджеты).
     return Scaffold(
-
-      // мы создаем AppBar с текстом "Home Page"
-      appBar: AppBar(title: const Text("Мои дела")),
-        // указываем текст в качестве тела Scaffold
-        // текст предварительно вложен в Center виджет,
-        // чтобы выровнять его по центру
-      body: Padding(
-        // объект EdgeInsets хранит четыре важные double переменные:
-        // left, top, right, bottom - отступ слева, сверху, справа и снизу
-        // EdgeInsets.all(10) - задает одинаковый отступ со всех сторон
-        // EdgeInsets.only(left: 10, right: 15) - задает отступ для
-        // определенной стороны или сторон
-        // EdgeInsets.symmetric - позволяет указать одинаковые
-        // отступы по горизонтали (left и right) и по вертикали (top и bottom)
-          padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
-          // создаем наш список
+      body:
+      CustomScrollView(
+        slivers: <Widget>[
+          const SliverAppBar(
+            pinned: true,
+            expandedHeight: 250.0,
+            backgroundColor: Color(0xfff7f6f2),
+            flexibleSpace: FlexibleSpaceBar(
+              title: Text(
+                  style: TextStyle(color: Colors.black,height: 1.171875,fontSize: 32),
+                  'Мои дела'
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
+            sliver: SliverToBoxAdapter(
+                child:
+                  Container(
+                    height: 8,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(8),
+                        topRight: Radius.circular(8)
+                      )
+                    ),
+                  )
+              )
+          ),
+          SliverPadding(
+              padding: const EdgeInsets.only(left: 8, right: 8),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                      (BuildContext context, int index) {
+                    return Dismissible(
+                      background: Container(
+                          color: Colors.green
+                      ),
+                      secondaryBackground :
+                        Container(
+                        color: Colors.red
+                        ),
+                        key: ValueKey<int>(allTasks[index].id),
+                        onDismissed: (DismissDirection direction) {
+                          if (direction == DismissDirection.startToEnd) {
+                            setState(() {
+                              allTasks[index].completance = true;
+                            });
+                          }
+                          else {
+                            setState(() {
+                              allTasks.removeAt(index);
+                            });
+                          }
+                        },
+                        confirmDismiss: (DismissDirection direction) async {
+                          if (direction == DismissDirection.startToEnd)
+                            {
+                              return false;
+                            }
+                          else
+                            {
+                              return true;
+                            }
+                        },
+                      child:
+                        Container(
+                          padding: const EdgeInsets.only(top: 14, bottom: 14),
+                          alignment: Alignment.center,
+                          color: Colors.white,
+                          child: Text(
+                              style: const TextStyle(height: 1.25,fontSize: 16),
+                              allTasks[index].desc
+                          ),
+                        )
+                      );
+                  },
+                  childCount: allTasks.length,
+                ),
+              ),
+          ),
+          SliverPadding(
+              padding: const EdgeInsets.only(left: 8, right: 8, bottom: 28),
+              sliver: SliverToBoxAdapter(
+                  child:
+                  Container(
+                    height: 8,
+                    decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                            bottomLeft: Radius.circular(8),
+                            bottomRight: Radius.circular(8)
+                        )
+                    ),
+                  )
+              )
+          ),
+        ],
+      )
+/*
           child: Container(
               padding: const EdgeInsets.only(top: 15, bottom: 15),
               decoration: const BoxDecoration(
@@ -131,7 +210,9 @@ class _HomePageState extends State<HomePage> {
 
               )
           ),
-      )
+         )
+
+ */
     );
   }
 

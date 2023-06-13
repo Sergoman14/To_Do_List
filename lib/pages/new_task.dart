@@ -15,7 +15,7 @@ class TaskPage extends StatelessWidget {
     // получаем пони по его id
     // обратите внимание: мы импортируем ponies
     // из файла pony_list_page.dart
-    final task = tasks[taskId];
+    //final task = tasks[taskId];
     return Scaffold(
         body: Padding(
           // указываем отступ для контента
@@ -51,7 +51,8 @@ class TaskPage extends StatelessWidget {
                   ),
                   child: Text(
                     // указываем имя pony
-                    task.desc,
+                    //task.desc,
+                    "heh",
                     style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white),
                   )
               ),
@@ -59,7 +60,8 @@ class TaskPage extends StatelessWidget {
                   padding: const EdgeInsets.all(10),
                   child: Text(
                     // указываем описание pony
-                      task.desc,
+                      //task.desc,
+                    "heh",
                       style: Theme.of(context).textTheme.bodyLarge
                   )
               )
