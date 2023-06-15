@@ -1,164 +1,66 @@
 import 'package:flutter/material.dart';
+import '../storage/tasks.dart';
+import '../widgets/task_tile.dart';
 import 'new_task.dart';
-import 'package:to_do_list/models/task.dart';
+import '../models/task.dart';
 
-// StatefulWidget имеет состояние, с которым
-// позже мы будем работать через функцию
-// setState(VoidCallback fn);
-// обратите внимание setState принимает другую функцию
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
-  // StatefulWidget должен возвращать класс,
-  // которые наследуется от State
   @override
-  _HomePageState createState() => _HomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-// В треугольных скобках мы указываем наш StatefulWidget
-// для которого будет создано состояние
-// нижнее подчеркивание _ используется для того,
-// чтобы скрыть доступ к _HomePageState  из других файлов
-// нижнее подчеркивание аналогия private в Java / Kotlin
 class _HomePageState extends State<HomePage> {
-  List<Task> allTasks = [
-    Task(
-      id: 0,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 1,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 2,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 3,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 4,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 5,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 6,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 7,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 8,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 9,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 10,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 11,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 12,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 13,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 14,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 15,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 16,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-    Task(
-      id: 17,
-      desc: "Надо делать",
-      importance: true,
-      completance: false,
-      deadline: "18:02:2023",
-    ),
-  ];
+  late List<Task> allTasks;
+  int newId = 18;
 
-  // функция build, как мы уже отметили, строит
-  // иерархию наших любимых виджетов
+  @override
+  void initState() {
+    super.initState();
+    allTasks = List<Task>.from(tasks);
+  }
+
   @override
   Widget build(BuildContext context) {
-    // В большинстве случаев Scaffold используется,
-    // как корневой виджет для страницы или экрана
-    // Scaffold позволяет вам указать AppBar, BottomNavigationBar,
-    // Drawer, FloatingActionButton и другие не менее важные
-    // компоненты (виджеты).
+    Future<void> catchTask(BuildContext context, int ind, Task task) async {
+      // Navigator.push returns a Future that completes after calling
+      // Navigator.pop on the Selection Screen.
+      Task? result = await Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => TaskPage(isNew: ind == allTasks.length,
+            task: task,
+          ),
+        ),
+      );
+      if (!mounted) return;
+      // When a BuildContext is used from a StatefulWidget, the mounted property
+      // must be checked after an asynchronous gap.
+      if (result?.id == -2) {
+        setState(
+          () {
+            allTasks.removeAt(ind);
+          },
+        );
+      } else if (result?.id != -1) {
+        if (ind < allTasks.length) {
+          setState(
+            () {
+              allTasks[ind] = result!;
+            },
+          );
+        } else {
+          setState(
+            () {
+              allTasks.add(result!);
+              newId += 1;
+            },
+          );
+        }
+      }
+    }
+
     return SafeArea(
       child: Scaffold(
         body: CustomScrollView(
@@ -190,48 +92,69 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.white,
                     borderRadius: BorderRadius.all(Radius.circular(8)),
                   ),
-                  child: ListView.builder(
-                    itemBuilder: (BuildContext context, int index) {
-                      return Dismissible(
-                          background: Container(color: Colors.green),
-                          secondaryBackground: Container(color: Colors.red),
-                          key: ValueKey<int>(allTasks[index].id),
-                          onDismissed: (DismissDirection direction) {
-                            if (direction == DismissDirection.startToEnd) {
-                              setState(() {
-                                allTasks[index].completance = true;
-                              });
-                            } else {
+                  child: Column(
+                    children: [
+                      ListView.builder(
+                        itemBuilder: (BuildContext context, int index) {
+                          return TaskTile(
+                            task: allTasks[index],
+                            onSwipeLeft: () {
                               setState(() {
                                 allTasks.removeAt(index);
                               });
-                            }
-                          },
-                          confirmDismiss: (DismissDirection direction) async {
-                            if (direction == DismissDirection.startToEnd) {
-                              return false;
-                            } else {
-                              return true;
-                            }
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.only(top: 14, bottom: 14),
-                            alignment: Alignment.center,
-                            color: Colors.white,
-                            child: Text(
-                                style:
-                                    const TextStyle(height: 1.25, fontSize: 16),
-                                allTasks[index].desc),
-                          ));
-                    },
-                    shrinkWrap: true,
-                    primary: false,
-                    itemCount: allTasks.length,
+                            },
+                            onSwipeRight: () {
+                              setState(() {
+                                allTasks[index].done = true;
+                              });
+                            },
+                            onIconTap: () {
+                              catchTask(context, index, allTasks[index]);
+                            },
+                            onTileTap: () {
+                              setState(() {
+                                allTasks[index].done = !allTasks[index].done;
+                              });
+                            },
+                          );
+                        },
+                        shrinkWrap: true,
+                        primary: false,
+                        itemCount: allTasks.length,
+                      ),
+                      Container(
+                        padding: const EdgeInsets.only(top: 14, bottom: 14),
+                        alignment: Alignment.center,
+                        color: Colors.white,
+                        child: const Text(
+                          style: TextStyle(
+                              color: Color(0x4D000000),
+                              height: 1.25,
+                              fontSize: 16),
+                          "Новое",
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
             ),
           ],
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () {
+            catchTask(
+              context,
+              allTasks.length,
+              Task(
+                  id: newId,
+                  desc: "",
+                  importance: Importance.none,
+                  done: false,
+                  deadline: ""),
+            );
+          },
+          child: const Icon(Icons.add),
         ),
       ),
     );

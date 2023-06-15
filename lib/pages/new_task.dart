@@ -1,73 +1,163 @@
 import 'package:flutter/material.dart';
-import 'home_page.dart';
+import 'package:to_do_list/models/task.dart';
+import 'package:to_do_list/widgets/delete_button.dart';
 
-class TaskPage extends StatelessWidget {
-  // в качестве параметра мы будет получать id пони
-  final int taskId;
+class TaskPage extends StatefulWidget {
+  final Task task;
+  final bool isNew;
 
-  // конструктор PonyDetailPage принимает ponyId,
-  // который будет присвоен нашему ранее
-  // объявленному полю
-  const TaskPage(this.taskId, {super.key});
+  const TaskPage({super.key, required this.task, required this.isNew});
+
+  @override
+  State<TaskPage> createState() => _TaskPageState();
+}
+
+class _TaskPageState extends State<TaskPage> {
+  late TextEditingController controller;
+  late Importance importance;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.task.desc);
+    importance = widget.task.importance;
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    // получаем пони по его id
-    // обратите внимание: мы импортируем ponies
-    // из файла pony_list_page.dart
-    //final task = tasks[taskId];
-    return Scaffold(
-        body: Padding(
-          // указываем отступ для контента
-          padding: const EdgeInsets.all(15),
-          // Column размещает дочерние виджеты в виде колонки
-          // crossAxisAlignment - выравнивание по ширине (колонка) или
-          // по высоте (строка)
-          // mainAxisAlignment работает наоборот
-          // в данном случае мы растягиваем дочерние элементы
-          // на всю ширину колонки
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                  padding: const EdgeInsets.all(10),
-                  // вы не можете указать color для Container,
-                  // т.к. свойство decoration было определено
-                  // color: Colors.pinkAccent,
-
-                  // BoxDecoration имеет дополнительные свойства,
-                  // посравнению с Container,
-                  // такие как: gradient, borderRadius, border, shape
-                  // и boxShadow
-                  // здесь мы задаем радиус закругления левого и правого
-                  // верхних углов
-                  decoration: const BoxDecoration(
-                    borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15)
-                    ),
-                    // цвет Container'а мы указываем в BoxDecoration
-                    color: Colors.pinkAccent,
-                  ),
-                  child: Text(
-                    // указываем имя pony
-                    //task.desc,
-                    "heh",
-                    style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: Colors.white),
-                  )
+    return SafeArea(
+      child: Scaffold(
+        body: CustomScrollView(slivers: <Widget>[
+          SliverAppBar(
+            pinned: true,
+            expandedHeight: 0.0,
+            backgroundColor: const Color(0xfff7f6f2),
+            leading: IconButton(
+              onPressed: () {
+                Navigator.pop(
+                    context,
+                    Task(
+                        id: -1,
+                        desc: '',
+                        importance: Importance.none,
+                        done: false,
+                        deadline: ''));
+              },
+              icon: const Icon(
+                Icons.close,
+                color: Colors.black,
               ),
-              Container(
-                  padding: const EdgeInsets.all(10),
-                  child: Text(
-                    // указываем описание pony
-                      //task.desc,
-                    "heh",
-                      style: Theme.of(context).textTheme.bodyLarge
-                  )
-              )
+            ),
+            actions: [
+              Padding(
+                padding: const EdgeInsets.only(right: 9),
+                child: TextButton(
+                  onPressed: () {
+                    Navigator.pop(
+                      context,
+                      Task(
+                          id: widget.task.id,
+                          desc: controller.text,
+                          importance: importance,
+                          deadline: widget.task.deadline,
+                          done: widget.task.done),
+                    );
+                  },
+                  child: const Text(
+                    'СОХРАНИТЬ',
+                    style: TextStyle(
+                        color: Color(0xff007aff), height: 1.7, fontSize: 14),
+                  ),
+                ),
+              ),
             ],
           ),
-        )
+          SliverToBoxAdapter(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: Container(
+                    padding: const EdgeInsets.all(16),
+                    decoration: const BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.black12,
+                            blurRadius: 2,
+                            offset: Offset(0, 2)),
+                        BoxShadow(color: Color(0x0F000000), blurRadius: 2),
+                      ],
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
+                      // цвет Container'а мы указываем в BoxDecoration
+                      color: Colors.white,
+                    ),
+                    child: TextField(
+                      keyboardType: TextInputType.multiline,
+                      controller: controller,
+                      maxLines: null,
+                      onTapOutside: (tap) {
+                        widget.task.desc = controller.text;
+                        FocusManager.instance.primaryFocus?.unfocus();
+                      },
+                      style: Theme.of(context)
+                          .textTheme
+                          .headlineMedium
+                          ?.copyWith(color: Colors.black),
+                      decoration: const InputDecoration(
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          hintText: 'Что надо сделать...',
+                          hintStyle: TextStyle(color: Color(0x4d000000))),
+                    ),
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(16),
+                  child: DropdownButton<Importance>(
+                    items: Importance.values
+                        .map<DropdownMenuItem<Importance>>((Importance value) {
+                      return DropdownMenuItem<Importance>(
+                        value: value,
+                        child: Text(value.text),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        importance = value!;
+                      });
+                    },
+                    value: importance,
+                    underline: Container(),
+                  ),
+                ),
+                const Padding(
+                  padding: EdgeInsets.all(16),
+                  child: Divider(
+                    height: 1,
+                    thickness: 0.5,
+                    color: Color(0x33000000),
+                  ),
+                ),
+                const Divider(
+                  height: 1,
+                  thickness: 0.5,
+                  color: Color(0x33000000),
+                ),
+                Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: DeleteButton(isNew: widget.isNew)),
+              ],
+            ),
+          ),
+        ]),
+      ),
     );
   }
 }
