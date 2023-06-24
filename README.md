@@ -8,6 +8,10 @@
 * Важность задачи работает как enum
 * Есть иконка приложения
 
+| <img src=github_images/home_light.png width="300" />  | <img src=github_images/moddifying_light.png width="300" /> |
+| --- | --- |
+| <img src=github_images/home_dark.png width="300" />  | <img src=github_images/moddifying_dark.png width="300" /> |
+
 ## Домашняя страница списка задач
 
 * Добавление новой задачи по кнопке '+'
