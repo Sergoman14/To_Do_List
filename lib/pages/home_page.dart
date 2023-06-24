@@ -130,11 +130,9 @@ class _HomePageState extends State<HomePage> {
                         padding: const EdgeInsets.only(top: 14, bottom: 14),
                         alignment: Alignment.center,
                         color: TodoElementsColor.getBackSecondaryColor(context),
-                        child: const Text(
-                          style: TextStyle(
-                              color: Color(0x4D000000),
-                              height: 1.25,
-                              fontSize: 16),
+                        child: Text(
+                          style: AppTextStyles.regylarBodyText.copyWith(
+                              color: TodoElementsColor.getTertiaryColor(context)),
                           'Новое',
                         ),
                       ),
@@ -162,3 +160,28 @@ class _HomePageState extends State<HomePage> {
     );
   }
 }
+
+/*
+TextField(
+                            keyboardType: TextInputType.multiline,
+                            controller: controller,
+                            maxLines: null,
+                            onTapOutside: (tap) {
+                              if (FocusManager.instance.primaryFocus == TextField)
+                              setState(() {
+                                allTasks.add(Task(id: newId, desc: controller.text));
+                                controller.clear();
+                              });
+                              newId += 1;
+                              FocusManager.instance.primaryFocus?.unfocus();
+                            },
+                            style: AppTextStyles.regylarBodyText,
+                            decoration: InputDecoration(
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                              hintText: 'Новое',
+                              hintStyle: AppTextStyles.regylarBodyText.copyWith(
+                                  color: TodoElementsColor.getTertiaryColor(context)),
+                            ),
+                          ),
+ */
