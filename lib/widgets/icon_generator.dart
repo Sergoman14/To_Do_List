@@ -12,7 +12,7 @@ class IconGenerator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (importance == Importance.none) {
+    if (importance == Importance.basic) {
       return Container();
     } else if (importance == Importance.low) {
       return Container(

@@ -1,6 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:to_do_list/models/task.dart';
 import 'package:to_do_list/widgets/delete_button.dart';
+
+import '../theme/app_text_styles.dart';
+import '../theme/elements_color.dart';
+import '../theme/elements_text_styles.dart';
 
 class TaskPage extends StatefulWidget {
   final Task task;
@@ -37,21 +42,19 @@ class _TaskPageState extends State<TaskPage> {
           SliverAppBar(
             pinned: true,
             expandedHeight: 0.0,
-            backgroundColor: const Color(0xfff7f6f2),
+            backgroundColor: TodoElementsColor.getBackPrimaryColor(context),
             leading: IconButton(
               onPressed: () {
                 Navigator.pop(
                     context,
                     Task(
-                        id: -1,
-                        desc: '',
-                        importance: Importance.none,
-                        done: false,
-                        deadline: ''));
+                      id: -1,
+                      desc: '',
+                    ));
               },
-              icon: const Icon(
+              icon: Icon(
                 Icons.close,
-                color: Colors.black,
+                color: TodoElementsColor.getLabelPrimaryColor(context),
               ),
             ),
             actions: [
@@ -69,11 +72,8 @@ class _TaskPageState extends State<TaskPage> {
                           done: widget.task.done),
                     );
                   },
-                  child: const Text(
-                    'СОХРАНИТЬ',
-                    style: TextStyle(
-                        color: Color(0xff007aff), height: 1.7, fontSize: 14),
-                  ),
+                  child: Text('СОХРАНИТЬ',
+                      style: AppElementsTextStyles.textButtonStyle(context)),
                 ),
               ),
             ],
@@ -86,17 +86,16 @@ class _TaskPageState extends State<TaskPage> {
                   padding: const EdgeInsets.all(16),
                   child: Container(
                     padding: const EdgeInsets.all(16),
-                    decoration: const BoxDecoration(
-                      boxShadow: [
+                    decoration: BoxDecoration(
+                      boxShadow: const [
                         BoxShadow(
                             color: Colors.black12,
                             blurRadius: 2,
                             offset: Offset(0, 2)),
                         BoxShadow(color: Color(0x0F000000), blurRadius: 2),
                       ],
-                      borderRadius: BorderRadius.all(Radius.circular(8)),
-                      // цвет Container'а мы указываем в BoxDecoration
-                      color: Colors.white,
+                      borderRadius: const BorderRadius.all(Radius.circular(8)),
+                      color: TodoElementsColor.getBackSecondaryColor(context),
                     ),
                     child: TextField(
                       keyboardType: TextInputType.multiline,
@@ -106,49 +105,72 @@ class _TaskPageState extends State<TaskPage> {
                         widget.task.desc = controller.text;
                         FocusManager.instance.primaryFocus?.unfocus();
                       },
-                      style: Theme.of(context)
-                          .textTheme
-                          .headlineMedium
-                          ?.copyWith(color: Colors.black),
-                      decoration: const InputDecoration(
-                          enabledBorder: InputBorder.none,
-                          focusedBorder: InputBorder.none,
-                          hintText: 'Что надо сделать...',
-                          hintStyle: TextStyle(color: Color(0x4d000000))),
+                      style: AppTextStyles.regylarBodyText,
+                      decoration: InputDecoration(
+                        enabledBorder: InputBorder.none,
+                        focusedBorder: InputBorder.none,
+                        hintText: 'Что надо сделать...',
+                        hintStyle: AppTextStyles.regylarBodyText.copyWith(
+                            color: TodoElementsColor.getTertiaryColor(context)),
+                      ),
                     ),
                   ),
                 ),
                 Padding(
                   padding: const EdgeInsets.all(16),
-                  child: DropdownButton<Importance>(
-                    items: Importance.values
-                        .map<DropdownMenuItem<Importance>>((Importance value) {
-                      return DropdownMenuItem<Importance>(
-                        value: value,
-                        child: Text(value.text),
-                      );
-                    }).toList(),
-                    onChanged: (value) {
-                      setState(() {
-                        importance = value!;
-                      });
-                    },
-                    value: importance,
-                    underline: Container(),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Важность', style: AppTextStyles.regylarBodyText),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 200),
+                        child: ButtonTheme(
+                          alignedDropdown: true,
+                          child: DropdownButton<Importance>(
+                            items: Importance.values
+                                .map<DropdownMenuItem<Importance>>(
+                                    (Importance value) {
+                              return DropdownMenuItem<Importance>(
+                                value: value,
+                                child: Text(value.text,
+                                    style: value == Importance.high
+                                        ? AppTextStyles.regylarBodyText
+                                            .copyWith(
+                                                color: TodoElementsColor
+                                                    .getRedColor(context))
+                                        : AppTextStyles.regylarBodyText),
+                              );
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                importance = value!;
+                              });
+                            },
+                            //style: importance == Importance.high
+                            //                                 ? AppElementsTextStyles.highValueStyle(context)
+                            //                                 : AppElementsTextStyles.lowValueStyle(context),
+                            borderRadius: BorderRadius.circular(2),
+                            value: importance,
+                            underline: Container(),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-                const Padding(
-                  padding: EdgeInsets.all(16),
+                Padding(
+                  padding: const EdgeInsets.all(16),
                   child: Divider(
                     height: 1,
                     thickness: 0.5,
-                    color: Color(0x33000000),
+                    color: TodoElementsColor.getSeparatorColor(context),
                   ),
                 ),
-                const Divider(
+                Divider(
                   height: 1,
                   thickness: 0.5,
-                  color: Color(0x33000000),
+                  color: TodoElementsColor.getSeparatorColor(context),
                 ),
                 Padding(
                     padding: const EdgeInsets.all(16),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/widgets/icon_generator.dart';
 import '../models/task.dart';
+import '../theme/app_text_styles.dart';
+import '../theme/elements_color.dart';
 
 class TaskTile extends StatelessWidget {
   const TaskTile({
@@ -20,9 +22,41 @@ class TaskTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final tileTextStyle = task.done
+        ? AppTextStyles.listTextStyle.copyWith(
+            color: TodoElementsColor.getTertiaryColor(context),
+            decoration: TextDecoration.lineThrough,
+            decorationColor: TodoElementsColor.getTertiaryColor(context),
+          )
+        : AppTextStyles.listTextStyle;
+
     return Dismissible(
-      background: Container(color: Colors.green),
-      secondaryBackground: Container(color: const Color(0xFFFF3B30)),
+      background: Container(
+        color: TodoElementsColor.getGreenColor(context),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const SizedBox(width: 20),
+            Icon(
+              Icons.check,
+              color: TodoElementsColor.getWhiteColor(context),
+            ),
+          ],
+        ),
+      ),
+      secondaryBackground: Container(
+        color: TodoElementsColor.getRedColor(context),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Icon(
+              Icons.delete,
+              color: TodoElementsColor.getWhiteColor(context),
+            ),
+            const SizedBox(width: 20),
+          ],
+        ),
+      ),
       key: ValueKey<int>(task.id),
       onDismissed: (DismissDirection direction) {
         if (direction == DismissDirection.endToStart) {
@@ -49,7 +83,7 @@ class TaskTile extends StatelessWidget {
         child: Container(
           padding: const EdgeInsets.only(top: 2),
           alignment: Alignment.center,
-          color: Colors.white,
+          color: TodoElementsColor.getBackSecondaryColor(context),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -57,7 +91,7 @@ class TaskTile extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.only(left: 5),
                 child: Checkbox(
-                  activeColor: Colors.green,
+                  activeColor: TodoElementsColor.getGreenColor(context),
                   value: task.done,
                   onChanged: (bool? value) {
                     onTileTap();
@@ -70,7 +104,7 @@ class TaskTile extends StatelessWidget {
                 child: SizedBox(
                   width: 244,
                   child: Text(
-                    style: const TextStyle(height: 1.25, fontSize: 16),
+                    style: tileTextStyle,
                     textCutter(task.desc),
                     softWrap: true,
                   ),
@@ -83,7 +117,7 @@ class TaskTile extends StatelessWidget {
                       onIconTap();
                     },
                     icon: const Icon(Icons.info_outline),
-                    color: const Color(0x4D000000)),
+                    color: TodoElementsColor.getTertiaryColor(context)),
               ),
             ],
           ),

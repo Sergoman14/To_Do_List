@@ -1,14 +1,14 @@
-enum Importance { none, low, high }
+enum Importance { basic, low, high }
 
 extension ImportanceExtension on Importance {
   String get text {
     switch (this) {
-      case Importance.none:
+      case Importance.basic:
         return 'Нет';
       case Importance.low:
         return 'Низкий';
       case Importance.high:
-        return 'Высокий';
+        return '!!Высокий';
     }
   }
 }
@@ -18,12 +18,12 @@ class Task {
   late String desc;
   late Importance importance;
   late bool done;
-  late String deadline;
+  late DateTime? deadline;
 
   Task(
       {required this.id,
       required this.desc,
-      required this.importance,
-      required this.done,
-      required this.deadline});
+      this.importance = Importance.basic,
+      this.done = false,
+      this.deadline});
 }

@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_list/theme/app_theme.dart';
+import 'package:to_do_list/theme/elements_color.dart';
 import 'pages/home_page.dart';
 
 void main() {
@@ -13,10 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'To Do List',
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(scaffoldBackgroundColor: const Color(0xfff7f6f2),
-      ),
-      home:  const HomePage(),
+      darkTheme: TodoTheme.dark(),
+      theme: TodoTheme.light(),
+      home: const HomePage(),
     );
   }
 }
-

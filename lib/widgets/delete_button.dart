@@ -9,8 +9,8 @@ class DeleteButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     if (isNew) {
-      return Row(
-        children: const [
+      return const Row(
+        children: [
           Icon(
             Icons.delete,
             color: Color(0x26000000),
@@ -28,10 +28,10 @@ class DeleteButton extends StatelessWidget {
           Navigator.pop(
               context,
               Task(
-                  id: -2, desc: '', importance: Importance.none, done: false, deadline: ""));
+                  id: -2, desc: '', importance: Importance.basic, done: false, deadline: null));
         },
-        child: Row(
-          children: const [
+        child: const Row(
+          children: [
             Icon(
               Icons.delete,
               color: Color(0xFFFF3B30),

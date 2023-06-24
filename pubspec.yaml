@@ -35,15 +35,19 @@ dependencies:
 
   # используется для произвольного размещения
   # компонентов в виде сетки
-  flutter_staggered_grid_view: ^0.4.0
+  flutter_staggered_grid_view: ^0.6.2
 
   # мы будем использовать MVC паттерн
-  mvc_pattern: ^7.0.0
+  mvc_pattern: ^8.12.0
 
   # большая часть данных будет браться из сети,
   # поэтому мы будем использовать http для
   # осуществления наших запросов
-  http: ^0.13.3
+  http: ^1.0.0
+  google_fonts: ^5.1.0
+  uuid: ^3.0.7
+  intl: ^0.18.1
+  path_provider: ^2.0.15
 
 
 dev_dependencies:
@@ -55,7 +59,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^2.0.0
+  flutter_lints: ^2.0.1
   flutter_launcher_icons: "^0.13.1"
 
 flutter_launcher_icons:

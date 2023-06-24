@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_list/theme/app_text_styles.dart';
 import '../storage/tasks.dart';
+import '../theme/elements_color.dart';
 import '../widgets/task_tile.dart';
-import 'new_task.dart';
+import '../pages/new_task.dart';
 import '../models/task.dart';
 
 class HomePage extends StatefulWidget {
@@ -29,7 +31,8 @@ class _HomePageState extends State<HomePage> {
       Task? result = await Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => TaskPage(isNew: ind == allTasks.length,
+          builder: (context) => TaskPage(
+            isNew: ind == allTasks.length,
             task: task,
           ),
         ),
@@ -65,15 +68,16 @@ class _HomePageState extends State<HomePage> {
       child: Scaffold(
         body: CustomScrollView(
           slivers: <Widget>[
-            const SliverAppBar(
+            SliverAppBar(
               pinned: true,
               expandedHeight: 250.0,
-              backgroundColor: Color(0xfff7f6f2),
+              backgroundColor: TodoElementsColor.getBackPrimaryColor(context),
               flexibleSpace: FlexibleSpaceBar(
                 title: Text(
-                    style: TextStyle(
-                        color: Colors.black, height: 1.171875, fontSize: 32),
-                    'Мои дела'),
+                  style: AppTextStyles.appBarTextStyle.copyWith(
+                      color: TodoElementsColor.getLabelPrimaryColor(context)),
+                  'Мои дела',
+                ),
               ),
             ),
             SliverPadding(
@@ -81,16 +85,16 @@ class _HomePageState extends State<HomePage> {
               sliver: SliverToBoxAdapter(
                 child: Container(
                   padding: const EdgeInsets.only(top: 8, bottom: 8),
-                  decoration: const BoxDecoration(
-                    boxShadow: [
+                  decoration: BoxDecoration(
+                    boxShadow: const [
                       BoxShadow(
                           color: Colors.black12,
                           blurRadius: 2,
                           offset: Offset(0, 2)),
                       BoxShadow(color: Color(0x0F000000), blurRadius: 2),
                     ],
-                    color: Colors.white,
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    color: TodoElementsColor.getBackSecondaryColor(context),
+                    borderRadius: const BorderRadius.all(Radius.circular(8)),
                   ),
                   child: Column(
                     children: [
@@ -105,7 +109,7 @@ class _HomePageState extends State<HomePage> {
                             },
                             onSwipeRight: () {
                               setState(() {
-                                allTasks[index].done = true;
+                                allTasks[index].done = !allTasks[index].done;
                               });
                             },
                             onIconTap: () {
@@ -125,13 +129,13 @@ class _HomePageState extends State<HomePage> {
                       Container(
                         padding: const EdgeInsets.only(top: 14, bottom: 14),
                         alignment: Alignment.center,
-                        color: Colors.white,
+                        color: TodoElementsColor.getBackSecondaryColor(context),
                         child: const Text(
                           style: TextStyle(
                               color: Color(0x4D000000),
                               height: 1.25,
                               fontSize: 16),
-                          "Новое",
+                          'Новое',
                         ),
                       ),
                     ],
@@ -147,11 +151,9 @@ class _HomePageState extends State<HomePage> {
               context,
               allTasks.length,
               Task(
-                  id: newId,
-                  desc: "",
-                  importance: Importance.none,
-                  done: false,
-                  deadline: ""),
+                id: newId,
+                desc: '',
+              ),
             );
           },
           child: const Icon(Icons.add),
